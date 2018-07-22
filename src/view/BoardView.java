@@ -12,23 +12,23 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import model.IGameState;
+import model.IBoard;
 import model.Piece;
 import util.Settings;
 
-public class GraphicRepresentation extends JPanel {
+public class BoardView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private boolean win;
 	private boolean loss;
-	private IGameState gs;
+	private IBoard board;
 
-	public GraphicRepresentation() {
+	public BoardView() {
 		this.win = false;
 		this.loss = false;
 	}
 
-	public void updateGameState(IGameState gs) {
-		this.gs = gs;
+	public void updateBoard(IBoard board) {
+		this.board = board;
 	}
 
 	public void win() {
@@ -45,7 +45,7 @@ public class GraphicRepresentation extends JPanel {
 
 	@Override
 	public void paint(Graphics g) {
-		if (gs != null) {
+		if (board != null) {
 			paintBackground(g);
 			paintSnake(g);
 			paintFood(g);
@@ -64,7 +64,7 @@ public class GraphicRepresentation extends JPanel {
 	private void paintSnake(Graphics g) {
 		int fieldSize = Settings.windowSize/Settings.pieceLength;
 		g.setColor(Settings.snakeColor);
-		for (Piece f: gs.getSnake())
+		for (Piece f: board.getSnake().getPieces())
 			g.fillRect(fieldSize*f.getX() + 1, fieldSize*f.getY() + 1, fieldSize - 2, fieldSize - 2);
 	}
 
@@ -80,7 +80,7 @@ public class GraphicRepresentation extends JPanel {
 		g2.setColor(Settings.foodColor);
 		g2.fillOval(0, 0, fieldSize-4, fieldSize-4);
 		g2.dispose();
-		g.drawImage(img, gs.getFood().getX()*fieldSize+2, gs.getFood().getY()*fieldSize+2, null);
+		g.drawImage(img, board.getFood().getX()*fieldSize+2, board.getFood().getY()*fieldSize+2, null);
 	}
 
 	private void paintWin(Graphics g) {

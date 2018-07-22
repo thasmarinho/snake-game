@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		IGUI g = new GUI();
-		GameEngine ge = new GameEngine(g);
+		BoardController ge = new BoardController(g);
 		ge.play();
 	}
 }

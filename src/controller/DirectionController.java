@@ -6,11 +6,11 @@ import java.awt.event.KeyListener;
 import model.Direction;
 import util.Settings;
 
-public class DirectionManager implements KeyListener{
+public class DirectionController implements KeyListener{
 	Direction currentDirection;
 	Direction nextDirection;
 
-	public DirectionManager() {
+	public DirectionController() {
 		this.currentDirection = Settings.defaultDirection;
 		this.nextDirection = Settings.defaultDirection;
 	}
@@ -27,23 +27,24 @@ public class DirectionManager implements KeyListener{
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			nextDirection = Direction.LEFT;
-			System.out.println("esquerda");
+			System.out.println("left");
 			break;
 		case KeyEvent.VK_RIGHT:
 			nextDirection = Direction.RIGHT;
-			System.out.println("direita");
+			System.out.println("right");
 			break;
 		case KeyEvent.VK_UP:
 			nextDirection = Direction.UP;
-			System.out.println("para cima!");
+			System.out.println("up!");
 			break;
 		case KeyEvent.VK_DOWN:
 			nextDirection = Direction.DOWN;
-			System.out.println("para baixo!");
+			System.out.println("down!");
 			break;
-		}}
+		}
+	}
 
-	public void keyReleased(KeyEvent arg0) {}
+	public void keyReleased(KeyEvent e) {}
 
-	public void keyTyped(KeyEvent arg0) {}
+	public void keyTyped(KeyEvent e) {}
 }

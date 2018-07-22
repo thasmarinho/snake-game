@@ -2,19 +2,22 @@ package controller;
 import java.util.concurrent.TimeUnit;
 
 import model.Direction;
-import model.GameState;
-import model.IGameState;
+import model.Board;
+import model.IBoard;
 import model.Piece;
+import model.Snake;
 import util.Settings;
 import view.IGUI;
 
-public class GameEngine {
-	IGUI gui;
-	IGameState gs;
+public class BoardController {
+	private IGUI gui;
+	private IBoard gameState;
+	private Snake snake;
 
-	public GameEngine(IGUI gui) {
+	public BoardController(IGUI gui) {
 		this.gui = gui;
-		this.gs = new GameState();
+		this.gameState = new Board();
+		this.snake = gameState.getSnake();
 	}
 
 	public void play() {
@@ -28,7 +31,7 @@ public class GameEngine {
 
 			//Do work
 			event = step();
-			gui.update(gs, event);
+			gui.update(gameState, event);
 
 			//Fps Stuff
 			elapsed = System.nanoTime() - start;
@@ -51,29 +54,31 @@ public class GameEngine {
 		else if (isLegalMove() == false)
 			eventFactory.setLoss(true);
 		else {
-			Piece moveTo = move(gs.getHead(), gui.getDirection());
-			gs.addNewHead(moveTo);
+			Piece moveTo = move(snake.getHead(), gui.getDirection());
+			snake.addNewHead(moveTo);
 			eventFactory.setMovementDirection(gui.getDirection());
 
-			if (moveTo.equals(gs.getFood())) {
-				gs.spawnFood();
+			if (moveTo.equals(gameState.getFood())) {
+				gameState.spawnFood();
 				eventFactory.setPickedUpFood(true);
 			} else
-				gs.removeTail();
+				snake.removeTail();
 		}
 		return eventFactory.buildEvent();
 	}
 
 	private boolean isGameWon() {
-		return (gs.getSnake().size() == Settings.pieceWidth * Settings.pieceLength);
+		int snakeSize = snake.getPieces().size();
+		
+		return (snakeSize == Settings.pieceWidth * Settings.pieceLength);
 	}
 
 	private boolean isLegalMove() {
 		Direction d = gui.getDirection();
-		Piece head = gs.getHead();
+		Piece head = snake.getHead();
 		if (head.getX() + d.getX() < 0 || head.getX() + d.getX() >= Settings.windowSize || head.getY() + d.getY() < 0 || head.getY() + d.getY() >= Settings.windowSize)
 			return false;
-		if (gs.getSnake().contains(move(head, d)) && !gs.getTail().equals(move(head, d)))
+		if (snake.containsPiece(move(head, d)) && !snake.getTail().equals(move(head, d)))
 			return false;
 		return true;
 	}

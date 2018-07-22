@@ -14,6 +14,13 @@ public class Piece {
 			throw new IllegalArgumentException("Illegal Parameters! x: " + x + " y: " + y);
 	}
 	
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
 	@Override
 	public boolean equals(Object o) {
 		if ((o instanceof Piece) == false)
@@ -22,10 +29,10 @@ public class Piece {
 			return (this.x == ((Piece)o).x && this.y == ((Piece)o).y);
 	}
 	
-	public int getX() {
-		return this.x;
-	}
-	public int getY() {
-		return this.y;
+	@Override
+	public int hashCode() {
+		int result = x;
+	    result = 31 * result + y;
+	    return result;
 	}
 }
